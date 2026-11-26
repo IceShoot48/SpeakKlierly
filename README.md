@@ -62,7 +62,14 @@ Prefer push-to-talk? **Hold** the hotkey while you speak and let go when you're 
 
 1. Grab `SpeakKlierly-0.1.zip` from the [latest release](https://github.com/IceShoot48/SpeakKlierly/releases/latest).
 2. Unzip it and drag **SpeakKlierly.app** into your **Applications** folder.
-3. Open it. Because the app isn't notarized by Apple yet, macOS may say it can't verify the developer. If so, open **System Settings → Privacy & Security**, scroll down and click **Open Anyway**. You only need to do this once.
+3. Open it. SpeakKlierly isn't notarized by Apple, so the first time macOS will say it "could not verify" the app and only offer **Done**. That's expected. To allow it:
+   - Open **System Settings → Privacy & Security**.
+   - Scroll down to the message about SpeakKlierly and click **Open Anyway**.
+   - Confirm with your password or Touch ID.
+
+   You only need to do this once. After that, SpeakKlierly opens normally.
+
+> After installing a newer version, macOS may ask for the Microphone and Accessibility permissions again.
 
 ### Build from source
 

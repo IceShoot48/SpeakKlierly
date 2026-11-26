@@ -17,8 +17,13 @@ A free, open-source macOS menu bar dictation app (Swift 6.2 / SwiftUI, macOS 27+
 
 - GitHub: `IceShoot48/SpeakKlierly`, **private** until the owner decides to make it public.
 - Commits use the GitHub noreply email set in this repo's local git config.
-- Releases: build, then `ditto -c -k --keepParent build/SpeakKlierly.app build/SpeakKlierly-<version>.zip`, then `gh release create v<version>` with the zip. Bump `CFBundleShortVersionString` in `Resources/Info.plist` first.
-- The app is not notarized, so the README tells downloaders to use **Open Anyway**.
+- Releases:
+  1. Bump `CFBundleShortVersionString` in `Resources/Info.plist`.
+  2. Run `scripts/release.sh`. It builds, ad-hoc signs and zips the app to `build/SpeakKlierly-<version>.zip`.
+  3. Run `gh release create v<version>` with that zip.
+  4. Run `./build.sh` again afterwards to put the owner's own copy back on the Apple Development signature.
+- Release builds must be ad-hoc signed. The owner's Apple Development certificate contains their personal email, so never ship a zip signed with it.
+- The owner has no paid Apple Developer membership, so the app can't be notarized. The README tells downloaders to use **Open Anyway**.
 
 ## Code map
 
