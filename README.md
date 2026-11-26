@@ -7,6 +7,7 @@
   <img src="https://img.shields.io/badge/Swift-6.2-F9A51A?logo=swift&logoColor=white" alt="Swift 6.2">
   <img src="https://img.shields.io/badge/license-MIT-161F3C" alt="MIT license">
   <img src="https://img.shields.io/badge/price-free-F9A51A" alt="Free">
+  <a href="https://buymeacoffee.com/iceshoot48"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-support-FFDD00?logo=buymeacoffee&logoColor=black" alt="Buy me a coffee"></a>
 </p>
 
 **SpeakKlierly** is a free, open-source dictation app for the Mac. Press a hotkey, say what you want to write, and clean, punctuated text appears wherever your cursor is: email, Slack, Notes, a code editor, a chat with an AI assistant, anything.
@@ -126,6 +127,16 @@ Sources/SpeakKlierly/
 Resources/                     # Info.plist and app icon
 build.sh                       # Builds, signs and (optionally) installs the app
 ```
+
+## Support SpeakKlierly
+
+SpeakKlierly is free and always will be, with no ads, no subscription and no paid tier. If it saves you time and you'd like to say thanks, you can buy me a coffee. It helps me keep improving the app.
+
+<p>
+  <a href="https://buymeacoffee.com/iceshoot48"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-☕-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee" height="40"></a>
+</p>
+
+Starring the repo and telling a friend helps too.
 
 ## Contributing
 
