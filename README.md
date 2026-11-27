@@ -14,6 +14,25 @@
 
 It lives quietly in your menu bar and does all of its speech recognition **on your Mac**. Your voice never leaves your computer, there's no account to create, and there's no subscription.
 
+## Why not just use Siri, or the mic button in a search box?
+
+Those are built for **short requests**. SpeakKlierly is built for **writing**.
+
+- **A mic button only works where someone put one.** It lives inside a single search box or website, and many web mic buttons send your audio to a server to be transcribed. SpeakKlierly works in *every* app from one shortcut: your email, Slack, Notes, a terminal, a code editor or an AI chat box. If you can paste there, you can dictate there.
+- **Siri is an assistant, not a typist.** Ask Siri something and it tries to *do* something: search the web, set a timer, open an app. SpeakKlierly never acts on your words. It writes down exactly what you said, right where your cursor is.
+- **Made for long thoughts, not three-word queries.** It uses Apple's long-form dictation model with automatic punctuation, so you can talk through a whole email or a detailed prompt in one go and get clean sentences back.
+- **You stay in control.** Tap to start and tap to stop, or hold the key and let go. Your text arrives all at once when you finish, instead of flickering half-typed into the page. Changed your mind? Press <kbd>Esc</kbd> and nothing is typed.
+- **Private, and you can check it.** Everything is transcribed on your Mac. There are no servers, accounts or analytics, and the code is open, so you don't have to take our word for it.
+
+| | Mic button in a search box | Siri | **SpeakKlierly** |
+|---|:---:|:---:|:---:|
+| Works in any app | ❌ Only that box | ❌ | ✅ |
+| Writes exactly what you say | ✅ | ❌ Tries to act on it | ✅ |
+| Built for long writing, with punctuation | ❌ Short queries | ❌ | ✅ |
+| Your own global shortcut, push-to-talk | ❌ | ❌ | ✅ |
+| Cancel before anything is typed | ❌ | ❌ | ✅ |
+| On-device and open source | Varies | ❌ Not open source | ✅ |
+
 ---
 
 ## How it works
