@@ -80,8 +80,8 @@ Prefer push-to-talk? **Hold** the hotkey while you speak and let go when you're 
 
 ### Download
 
-1. Grab `SpeakKlierly-0.1.zip` from the [latest release](https://github.com/IceShoot48/SpeakKlierly/releases/latest).
-2. Unzip it and drag **SpeakKlierly.app** into your **Applications** folder.
+1. Grab the latest `SpeakKlierly-<version>.zip` from the [latest release](https://github.com/IceShoot48/SpeakKlierly/releases/latest).
+2. Unzip it and drag **SpeakKlierly.app** into your **Applications** folder. Don't open it straight from Downloads, or macOS won't save its permissions.
 3. Open it. SpeakKlierly isn't notarized by Apple, so the first time macOS will say it "could not verify" the app and only offer **Done**. That's expected. To allow it:
    - Open **System Settings → Privacy & Security**.
    - Scroll down to the message about SpeakKlierly and click **Open Anyway**.
@@ -105,14 +105,18 @@ This builds `SpeakKlierly.app`, copies it to `/Applications` and launches it. To
 
 ### First launch
 
-The first time it runs, SpeakKlierly opens its Settings window and asks for two permissions:
+The first time it runs, SpeakKlierly opens a short **Finish setting up** screen with two steps. Click **Allow** on each one:
 
-| Permission | Why it's needed |
-|---|---|
-| **Microphone** | To hear you while you're dictating, and only then. |
-| **Accessibility** | To paste the finished text into the app you're using. |
+| Step | Permission | Why it's needed |
+|---|---|---|
+| 1 | **Microphone** | To hear you while you're dictating, and only then. |
+| 2 | **Accessibility** | To paste the finished text into the app you're using. |
 
-You can check or change both at any time in **Settings → Permissions**, or in **System Settings → Privacy & Security**.
+For Accessibility, macOS opens System Settings. Switch **SpeakKlierly** on there, and the setup screen ticks it off by itself. If SpeakKlierly isn't in the list, click **+** and choose it from Applications.
+
+**Is it safe to allow these?** Yes. SpeakKlierly only listens while your shortcut is active, turns speech into text on your Mac, and only uses Accessibility to paste that text. Nothing is uploaded, and the code is right here for anyone to check.
+
+The setup screen comes back on each launch until both are allowed. You can also check them any time under **Settings → Permissions**.
 
 > **Tip:** If you have an Apple Development certificate, `build.sh` signs the app with it automatically, so macOS remembers your permissions across rebuilds.
 

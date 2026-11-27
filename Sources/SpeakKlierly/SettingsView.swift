@@ -1,15 +1,22 @@
 import AppKit
-import AVFoundation
 import Carbon.HIToolbox
 import SwiftUI
 
 struct SettingsView: View {
     let controller: DictationController
+    /// Bumped every second so permission changes made in System Settings show up right away.
+    @State private var permissionCheck = 0
 
     var body: some View {
         @Bindable var settings = controller.settings
+        let _ = permissionCheck
+        let needsSetup = !Permissions.allGranted || !Permissions.isInApplicationsFolder
 
         Form {
+            if needsSetup {
+                PermissionsSection(isSetup: true)
+            }
+
             Section("Shortcut") {
                 LabeledContent("Dictation hotkey") {
                     HotKeyRecorder(controller: controller)
@@ -36,45 +43,117 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Permissions") {
-                PermissionRow(
-                    title: "Microphone",
-                    isGranted: AVAuthorization.microphoneGranted,
-                    settingsURL: "x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone"
-                )
-                PermissionRow(
-                    title: "Accessibility (to type text)",
-                    isGranted: TextInserter.hasAccessibilityPermission,
-                    settingsURL: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
-                )
+            if !needsSetup {
+                PermissionsSection(isSetup: false)
             }
         }
         .formStyle(.grouped)
-        .frame(width: 460)
+        .frame(width: 480)
         .fixedSize(horizontal: false, vertical: true)
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(1))
+                permissionCheck &+= 1
+            }
+        }
     }
 }
 
-private enum AVAuthorization {
-    static var microphoneGranted: Bool {
-        AVCaptureDevice.authorizationStatus(for: .audio) == .authorized
+/// Microphone and Accessibility, with one button each and a short, friendly explanation.
+/// Shown at the top as "Finish setting up" until everything is granted, then at the bottom as a status list.
+private struct PermissionsSection: View {
+    let isSetup: Bool
+
+    var body: some View {
+        let micGranted = Permissions.microphoneGranted
+        let axGranted = Permissions.accessibilityGranted
+
+        Section {
+            if !Permissions.isInApplicationsFolder {
+                VStack(alignment: .leading, spacing: 6) {
+                    Label("Move SpeakKlierly to Applications first", systemImage: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                        .font(.body.weight(.semibold))
+                    Text("macOS won't save its permissions while it runs from Downloads. Quit, drag SpeakKlierly into your Applications folder, and open it from there.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        Button("Show in Finder") { Permissions.revealAppInFinder() }
+                        Button("Quit") { NSApplication.shared.terminate(nil) }
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+
+            PermissionRow(
+                step: isSetup ? 1 : nil,
+                title: "Microphone",
+                detail: "So it can hear you while you dictate.",
+                isGranted: micGranted,
+                buttonTitle: Permissions.microphoneStatus == .notDetermined ? "Allow" : "Open Settings…"
+            ) {
+                Task { await Permissions.requestMicrophone() }
+            }
+
+            PermissionRow(
+                step: isSetup ? 2 : nil,
+                title: "Accessibility",
+                detail: "So it can type the text into your apps.",
+                isGranted: axGranted,
+                buttonTitle: "Allow…"
+            ) {
+                Permissions.requestAccessibility()
+            }
+
+            if !axGranted {
+                Text("In System Settings, switch SpeakKlierly on. Not in the list? Click **+** and choose it from Applications. Already on but not typing? Remove it with **−** and add it again.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+        } header: {
+            Text(isSetup ? "Finish setting up" : "Permissions")
+        } footer: {
+            if isSetup {
+                Text("**Why this is safe:** SpeakKlierly only listens while your shortcut is active, turns speech into text right on your Mac, and only uses Accessibility to paste that text. Nothing is uploaded, and the code is open source.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
     }
 }
 
 private struct PermissionRow: View {
+    let step: Int?
     let title: String
+    let detail: String
     let isGranted: Bool
-    let settingsURL: String
+    let buttonTitle: String
+    let action: () -> Void
 
     var body: some View {
-        LabeledContent(title) {
+        HStack(alignment: .center, spacing: 10) {
+            if let step {
+                Image(systemName: isGranted ? "checkmark.circle.fill" : "\(step).circle")
+                    .font(.title2)
+                    .foregroundStyle(isGranted ? .green : .secondary)
+            }
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                Text(detail)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
             if isGranted {
-                Label("Granted", systemImage: "checkmark.circle.fill")
+                Label("Allowed", systemImage: "checkmark.circle.fill")
                     .foregroundStyle(.green)
-            } else if let url = URL(string: settingsURL) {
-                Button("Open Settings…") { NSWorkspace.shared.open(url) }
+            } else {
+                Button(buttonTitle, action: action)
+                    .buttonStyle(.borderedProminent)
             }
         }
+        .padding(.vertical, 2)
     }
 }
 

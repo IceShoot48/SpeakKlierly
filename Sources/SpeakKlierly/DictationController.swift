@@ -29,6 +29,8 @@ final class DictationController {
     private(set) var hotKeyConflict = false
 
     let settings: AppSettings
+    /// Called when a permission is missing, so the app can show the setup window.
+    @ObservationIgnored var onNeedsSetup: (() -> Void)?
 
     private static let levelCount = 14
     /// Holding the hotkey longer than this counts as push-to-talk rather than a tap.
@@ -50,7 +52,7 @@ final class DictationController {
         applyHotKey()
         overlay = RecordingOverlay(controller: self)
 
-        Task { await requestPermissions() }
+        Task { await prepareSpeechModel() }
     }
 
     /// Registers the hotkey from settings. Call after the user records a new shortcut.
@@ -108,9 +110,19 @@ final class DictationController {
     // MARK: - Dictation
 
     private func startListening() {
-        guard AVCaptureDevice.authorizationStatus(for: .audio) == .authorized else {
-            errorMessage = "Microphone access is off. Enable it in System Settings › Privacy & Security › Microphone."
-            Task { await requestPermissions() }
+        switch Permissions.microphoneStatus {
+        case .authorized:
+            break
+        case .notDetermined:
+            // First use: ask now, and start listening if the user allows it.
+            Task {
+                await Permissions.requestMicrophone()
+                if Permissions.microphoneGranted { startListening() }
+            }
+            return
+        default:
+            errorMessage = "Microphone access is off. Turn it on in SpeakKlierly Settings."
+            onNeedsSetup?()
             return
         }
         state = .starting
@@ -146,8 +158,8 @@ final class DictationController {
                     // Without Accessibility we can't paste, but the text is still on the clipboard.
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(text, forType: .string)
-                    errorMessage = "Copied to clipboard. Grant Accessibility access so text can be typed for you."
-                    TextInserter.requestAccessibilityPermission()
+                    errorMessage = "Copied to clipboard. Allow Accessibility in Settings so text can be typed for you."
+                    onNeedsSetup?()
                 }
             } catch {
                 state = .idle
@@ -200,15 +212,11 @@ final class DictationController {
         NSSound(named: sound)?.play()
     }
 
-    // MARK: - Permissions
+    // MARK: - Speech model
 
-    private func requestPermissions() async {
-        if AVCaptureDevice.authorizationStatus(for: .audio) == .notDetermined {
-            _ = await AVCaptureDevice.requestAccess(for: .audio)
-        }
-        if !TextInserter.hasAccessibilityPermission {
-            TextInserter.requestAccessibilityPermission()
-        }
+    /// Permissions are asked for one at a time from the Settings window (see `Permissions`),
+    /// not all at once at launch, where a menu bar app's prompts are easy to miss.
+    private func prepareSpeechModel() async {
         // Fetch the on-device speech model up front so the first dictation starts quickly.
         do {
             try await transcriber.prepareAssets()

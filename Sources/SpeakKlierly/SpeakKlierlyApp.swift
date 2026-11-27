@@ -19,11 +19,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        controller.onNeedsSetup = { [weak self] in self?.showSettings() }
+
         let defaults = UserDefaults.standard
-        if !defaults.bool(forKey: "hasLaunchedBefore") {
+        let isFirstLaunch = !defaults.bool(forKey: "hasLaunchedBefore")
+        if isFirstLaunch {
             defaults.set(true, forKey: "hasLaunchedBefore")
             // Start automatically at login unless the user turns it off later.
             controller.settings.launchAtLogin = true
+        }
+        // Show the setup steps on first launch, and on every launch until permissions are granted.
+        if isFirstLaunch || !Permissions.allGranted || !Permissions.isInApplicationsFolder {
             showSettings()
         }
     }
