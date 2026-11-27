@@ -1,6 +1,6 @@
 # SpeakKlierly
 
-A free, open-source macOS menu bar dictation app (Swift 6.2 / SwiftUI, macOS 27+). Press a hotkey (⌥Space by default), talk, and the text is transcribed on-device with Apple's SpeechAnalyzer and pasted into the frontmost app.
+A free, open-source macOS menu bar dictation app (Swift 6.2 / SwiftUI, macOS 26+). Press a hotkey (⌥Space by default), talk, and the text is transcribed on-device with Apple's SpeechAnalyzer and pasted into the frontmost app.
 
 ## Project boundaries
 

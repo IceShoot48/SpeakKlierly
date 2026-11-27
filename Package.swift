@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "SpeakKlierly",
-    platforms: [.macOS("27.0")],
+    platforms: [.macOS("26.0")],
     targets: [
         .executableTarget(
             name: "SpeakKlierly",

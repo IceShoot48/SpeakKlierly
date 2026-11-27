@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/macOS-27%2B-161F3C?logo=apple&logoColor=white" alt="macOS 27+">
+  <img src="https://img.shields.io/badge/macOS-26%2B-161F3C?logo=apple&logoColor=white" alt="macOS 26+">
   <img src="https://img.shields.io/badge/Swift-6.2-F9A51A?logo=swift&logoColor=white" alt="Swift 6.2">
   <img src="https://img.shields.io/badge/license-MIT-161F3C" alt="MIT license">
   <img src="https://img.shields.io/badge/price-free-F9A51A" alt="Free">
@@ -72,7 +72,7 @@ Prefer push-to-talk? **Hold** the hotkey while you speak and let go when you're 
 
 ## Requirements
 
-- macOS 27 or later
+- macOS 26 or later
 - A microphone (built-in is fine)
 - A system language supported by Apple's on-device dictation
 
