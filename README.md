@@ -161,6 +161,10 @@ SpeakKlierly is free and always will be, with no ads, no subscription and no pai
 
 Starring the repo and telling a friend helps too.
 
+## What's new
+
+See the [changelog](CHANGELOG.md) for what changed in each version.
+
 ## Contributing
 
 Bug reports, ideas and pull requests are welcome. Open an issue to talk about a change, or just send a PR.
